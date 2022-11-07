@@ -18,7 +18,7 @@ UNKNOWN = 'unknown'
 logger = logging.getLogger('phockup')
 
 
-ignored_files = ('.DS_Store', 'Thumbs.db')
+ignored_files = ('.DS_Store', 'Thumbs.db', '.lrfprev')
 
 
 class Phockup():
@@ -26,6 +26,8 @@ class Phockup():
     DEFAULT_NO_DATE_DIRECTORY = "unknown"
 
     def __init__(self, input_dir, output_dir, **args):
+        print("Hello?")
+
         start_time = time.time()
         self.files_processed = 0
         self.duplicates_found = 0
@@ -66,7 +68,8 @@ class Phockup():
 
         if self.dry_run:
             logger.warning("Dry-run phockup (does a trial run with no permanent changes)...")
-
+        
+        logger.info("Running Kevin Dev Version")
         self.check_directories()
         # Get the number of files
         if self.progress:
@@ -134,6 +137,9 @@ class Phockup():
             file_paths_to_process = []
             for filename in files:
                 if filename in ignored_files:
+                    continue
+                if filename.endswith(".lrfprev"):
+                    logger.info(f"Skipping ignored file: '{filename}'")
                     continue
                 file_paths_to_process.append(os.path.join(root, filename))
             if self.max_concurrency > 1:
